@@ -1,45 +1,49 @@
 /* src/components/LogoPreview.css */
 .logo-preview-container {
-  border: 1px solid #ccc;
-  padding: 20px;
-  margin: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center; /* Center items horizontally */
 }
 
 .logo-display-area {
-  width: 300px;
-  height: 200px;
-  border: 2px dashed #007bff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.2em;
-  color: #666;
-  background-color: white;
-  border-radius: 5px;
+    width: 300px;
+    height: 200px;
+    border: 2px dashed #907bff; /* Dashed blue border */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.2em; /* Larger font size for the logo text */
+    color: #333;
+    background-color: #fff;
+    border-radius: 5px;
+    overflow: hidden; /* Ensure text doesn't overflow */
 }
 
 .placeholder-text {
-  font-style: italic;
-  color: #999;
+    font-family: 'Arial Black', sans-serif; /* A bold, impactful font */
+    font-style: normal; /* Override potential italic */
+    color: #000; /* Black text */
+    text-align: center;
+    margin: 0; /* Remove default paragraph margin */
+    line-height: 1; /* Adjust line height for single line */
+    padding: 10px; /* Some padding inside the logo area */
 }
 
 .download-button {
-  padding: 10px 20px;
-  background-color: #28a745;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1em;
-  transition: background-color 0.3s ease;
+    padding: 10px 20px;
+    background-color: #28a745; /* Green button */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
 }
 
 .download-button:hover {
-  background-color: #218838;
+    background-color: #218838; /* Darker green on hover */
 }
