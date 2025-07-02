@@ -1,0 +1,35 @@
+/* src/components/ColorInput.css */
+.color-input-container {
+    margin-bottom: 15px;
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+.color-input-container label {
+    font-weight: bold;
+    color: #333;
+    margin-left: 5px;
+}
+
+.color-picker {
+    width: 100px; /* Adjust width as needed for the color picker */
+    height: 40px; /* Adjust height */
+    padding: 0; /* Remove default padding */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.color-picker::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.color-picker::-webkit-color-swatch {
+    border: none;
+    border-radius: 4px;
+}
