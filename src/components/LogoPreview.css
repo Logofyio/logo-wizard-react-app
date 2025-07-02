@@ -50,24 +50,22 @@
 
 /* src/components/LogoPreview.css (additional styles for icon and shape) */
 
+/* src/components/LogoPreview.css (additional styles for icon and shape) */
+
 .logo-icon {
-    max-width: 50px; /* Adjust size as needed */
+    max-width: 50px; /* Adjust size as needed for your icons */
     max-height: 50px;
     margin-bottom: 10px; /* Space between icon and text */
+    object-fit: contain; /* Ensures the image scales properly */
 }
 
 /* Basic shape examples (you'll expand these based on your old project) */
 .shape-circle {
     border-radius: 50%;
-    /* Additional styling for circle shape */
+    /* You might need to adjust width/height of .logo-display-area if it's not already square */
 }
 
 .shape-square {
     border-radius: 0;
     /* This is usually default, but good to have for clarity */
 }
-
-/* Example for a custom shape if you had specific ones */
-/* .shape-custom-polygon {
-    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-} */

@@ -10,9 +10,9 @@ const LogoPreview = forwardRef(({
   fontSize,
   textColor,
   backgroundColor,
-  selectedIcon,   // New prop for the icon image source
-  selectedShape   // New prop for the shape class name
-}, ref) => { // 'ref' is the second argument when using forwardRef when using forwardRef
+  selectedIcon,   // Prop for the icon image source
+  selectedShape   // Prop for the shape class name
+}, ref) => { // 'ref' is the second argument when using forwardRef
 
   // Inline style object for the logo text
   const logoTextStyle = {
