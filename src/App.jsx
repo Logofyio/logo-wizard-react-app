@@ -20,8 +20,7 @@ function App() {
 
       <div className="controls-area"> {/* New container for controls */}
         {/* ADDED FOR TESTING: Check if plain HTML renders here */}
-        <p>This is a test of the controls area.</p>
-
+       
         <TextInput
           label="Logo Text:"
           value={logoText}           // Pass current state value as a prop
