@@ -47,3 +47,27 @@
 .download-button:hover {
     background-color: #218838; /* Darker green on hover */
 }
+
+/* src/components/LogoPreview.css (additional styles for icon and shape) */
+
+.logo-icon {
+    max-width: 50px; /* Adjust size as needed */
+    max-height: 50px;
+    margin-bottom: 10px; /* Space between icon and text */
+}
+
+/* Basic shape examples (you'll expand these based on your old project) */
+.shape-circle {
+    border-radius: 50%;
+    /* Additional styling for circle shape */
+}
+
+.shape-square {
+    border-radius: 0;
+    /* This is usually default, but good to have for clarity */
+}
+
+/* Example for a custom shape if you had specific ones */
+/* .shape-custom-polygon {
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+} */

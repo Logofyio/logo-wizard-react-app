@@ -1,55 +1,57 @@
 // src/components/LogoPreview.jsx
-import React, { useRef } from 'react'; // Import useRef hook
-import html2canvas from 'html2canvas'; // Import html2canvas
+import React, { forwardRef } from 'react'; // Import forwardRef hook
 import './LogoPreview.css';
 
-function LogoPreview({ logoText }) {
-  const logoRef = useRef(null); // Create a ref for the logo display area HTML element
+// LogoPreview is now wrapped with forwardRef to allow App.jsx to pass a ref to its internal div.
+// It also accepts all the new styling and icon/shape props.
+const LogoPreview = forwardRef(({
+  logoText,
+  fontFamily,
+  fontSize,
+  textColor,
+  backgroundColor,
+  selectedIcon,   // New prop for the icon image source
+  selectedShape   // New prop for the shape class name
+}, ref) => { // 'ref' is the second argument when using forwardRef when using forwardRef
 
-  const handleDownloadClick = async () => { // Make the function asynchronous
-    if (logoRef.current) { // Ensure the ref is attached to an element
-      try {
-        // Capture the content of the div referenced by logoRef
-        const canvas = await html2canvas(logoRef.current, {
-          useCORS: true, // Important for handling external resources if any (e.g., fonts, images)
-          backgroundColor: null, // Makes the background transparent if your logo has transparency
-        });
-
-        // Convert the captured canvas to a data URL (PNG image)
-        const image = canvas.toDataURL('image/png');
-
-        // Create a temporary link element to trigger the download
-        const link = document.createElement('a');
-        link.href = image;
-        link.download = `${logoText || 'logo'}_wizard.png`; // Suggest a filename based on logoText
-
-        // Programmatically click the link to trigger the download
-        document.body.appendChild(link); // Append to body to make it clickable in all browsers
-        link.click(); // Simulate a click on the link
-        document.body.removeChild(link); // Clean up the temporary link element
-
-        console.log("Logo downloaded!"); // Log success to console
-      } catch (error) {
-        console.error("Error generating or downloading logo:", error); // Log any errors
-      }
-    } else {
-      console.log("Logo preview element not found for download.");
-    }
+  // Inline style object for the logo text
+  const logoTextStyle = {
+    fontFamily: fontFamily,
+    fontSize: `${fontSize}em`, // Ensure 'em' unit is used
+    color: textColor,
   };
+
+  // Inline style object for the logo display area background
+  const logoDisplayAreaStyle = {
+    backgroundColor: backgroundColor,
+  };
+
+  // Conditional class name for the shape (e.g., 'shape-circle', 'shape-square')
+  const shapeClassName = selectedShape ? `shape-${selectedShape}` : '';
+
+  // The download button and its logic are now handled in App.jsx (Step 3),
+  // so they are removed from LogoPreview. This component is purely for display.
 
   return (
     <div className="logo-preview-container">
-      {/* Attach the ref to the div you want html2canvas to capture */}
-      <div className="logo-display-area" ref={logoRef}>
-        <p className="placeholder-text">
+      {/* Attach the forwarded ref to the div that html2canvas needs to capture */}
+      <div
+        className={`logo-display-area ${shapeClassName}`} // Apply shape class here
+        style={logoDisplayAreaStyle} // Apply background color here
+        ref={ref} // Attach the forwarded ref
+      >
+        {/* Conditionally render the icon if selectedIcon prop has a value */}
+        {selectedIcon && (
+          // IMPORTANT: Ensure your icon paths in App.jsx are correct and accessible (e.g., in /public folder)
+          <img src={selectedIcon} alt="Logo Icon" className="logo-icon" />
+        )}
+        <p className="placeholder-text" style={logoTextStyle}>
           {logoText || "Your Logo Will Appear Here"}
         </p>
       </div>
-      {/* Ensure the button has the onClick handler */}
-      <button className="download-button" onClick={handleDownloadClick}>
-        Download Logo
-      </button>
+      {/* Download button removed from here */}
     </div>
   );
-}
+}); // End of forwardRef wrapper
+
 export default LogoPreview;
