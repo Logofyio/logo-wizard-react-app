@@ -1,57 +1,71 @@
 // src/components/LogoPreview.jsx
-import React, { forwardRef } from 'react'; // Import forwardRef hook
+import React, { forwardRef, useState, useEffect } from 'react';
+import * as LucideIcons from 'lucide-react'; // Import all Lucide icons
 import './LogoPreview.css';
 
-// LogoPreview is now wrapped with forwardRef to allow App.jsx to pass a ref to its internal div.
-// It also accepts all the new styling and icon/shape props.
+// Helper to get an icon component by its string name
+const getLucideIcon = (iconName) => {
+  const IconComponent = LucideIcons[iconName];
+  return IconComponent ? <IconComponent size={50} className="logo-icon" /> : null;
+};
+
 const LogoPreview = forwardRef(({
   logoText,
   fontFamily,
   fontSize,
   textColor,
   backgroundColor,
-  selectedIcon,   // Prop for the icon image source
-  selectedShape   // Prop for the shape class name
-}, ref) => { // 'ref' is the second argument when using forwardRef
+  selectedIcon, // This is now the icon name string (e.g., 'star', 'heart')
+  selectedShape
+}, ref) => {
 
-  // Inline style object for the logo text
+  // We use a state here for the rendered icon component.
+  // This is a common pattern when you need to dynamically load/render components.
+  const [IconToRender, setIconToRender] = useState(null);
+
+  useEffect(() => {
+    if (selectedIcon) {
+      // Get the icon component based on the name
+      const IconComponent = LucideIcons[selectedIcon];
+      if (IconComponent) {
+        // Render the component with desired props
+        setIconToRender(<IconComponent size={50} className="logo-icon" />);
+      } else {
+        setIconToRender(null); // Clear if icon not found
+        console.warn(`Lucide icon "${selectedIcon}" not found.`);
+      }
+    } else {
+      setIconToRender(null); // Clear icon if 'No Icon' is selected
+    }
+  }, [selectedIcon]); // Re-run effect whenever selectedIcon changes
+
   const logoTextStyle = {
     fontFamily: fontFamily,
-    fontSize: `${fontSize}em`, // Ensure 'em' unit is used
+    fontSize: `${fontSize}em`,
     color: textColor,
   };
 
-  // Inline style object for the logo display area background
   const logoDisplayAreaStyle = {
     backgroundColor: backgroundColor,
   };
 
-  // Conditional class name for the shape (e.g., 'shape-circle', 'shape-square')
   const shapeClassName = selectedShape ? `shape-${selectedShape}` : '';
-
-  // The download button and its logic are now handled in App.jsx (Step 3),
-  // so they are removed from LogoPreview. This component is purely for display.
 
   return (
     <div className="logo-preview-container">
-      {/* Attach the forwarded ref to the div that html2canvas needs to capture */}
       <div
-        className={`logo-display-area ${shapeClassName}`} // Apply shape class here
-        style={logoDisplayAreaStyle} // Apply background color here
-        ref={ref} // Attach the forwarded ref
+        className={`logo-display-area ${shapeClassName}`}
+        style={logoDisplayAreaStyle}
+        ref={ref}
       >
-        {/* Conditionally render the icon if selectedIcon prop has a value */}
-        {selectedIcon && (
-          // IMPORTANT: Ensure your icon paths in App.jsx are correct and accessible (e.g., in /public folder)
-          <img src={selectedIcon} alt="Logo Icon" className="logo-icon" />
-        )}
+        {/* Render the dynamically loaded icon */}
+        {IconToRender}
         <p className="placeholder-text" style={logoTextStyle}>
           {logoText || "Your Logo Will Appear Here"}
         </p>
       </div>
-      {/* Download button removed from here */}
     </div>
   );
-}); // End of forwardRef wrapper
+});
 
 export default LogoPreview;

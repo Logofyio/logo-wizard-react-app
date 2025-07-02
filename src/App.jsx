@@ -1,28 +1,29 @@
 // src/App.jsx
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import './App.css';
 import LogoPreview from './components/LogoPreview';
 import TextInput from './components/TextInput';
 import SelectInput from './components/SelectInput';
 import ColorInput from './components/ColorInput';
-// We will add imports for new Icon/Shape components here later
+import html2canvas from 'html2canvas';
+
+// IMPORTANT: We will import specific Lucide icons in LogoPreview, not here.
+// App.jsx will just pass the *name* of the icon.
 
 function App() {
-  // State for the current step in the wizard
-  const [currentStep, setCurrentStep] = useState(1); // Start at Step 1
-
-  // State variables for logo properties
+  const [currentStep, setCurrentStep] = useState(1);
   const [logoText, setLogoText] = useState('Your Logo');
   const [fontFamily, setFontFamily] = useState('Arial Black');
   const [fontSize, setFontSize] = useState(2.2);
   const [textColor, setTextColor] = useState('#000000');
   const [backgroundColor, setBackgroundColor] = useState('#FFFFFF');
 
-  // NEW STATE VARIABLES for Icon and Shape
-  const [selectedIcon, setSelectedIcon] = useState(''); // Stores the value/path of the selected icon
-  const [selectedShape, setSelectedShape] = useState(''); // Stores the value/name of the selected shape
+  // selectedIcon now stores the ICON NAME (e.g., 'star', 'heart')
+  const [selectedIcon, setSelectedIcon] = useState('');
+  const [selectedShape, setSelectedShape] = useState('');
 
-  // Event handlers for logo properties
+  const logoRef = useRef(null);
+
   const handleLogoTextChange = (event) => {
     setLogoText(event.target.value);
   };
@@ -39,7 +40,6 @@ function App() {
     setBackgroundColor(event.target.value);
   };
 
-  // NEW EVENT HANDLERS for Icon and Shape
   const handleIconChange = (event) => {
     setSelectedIcon(event.target.value);
   };
@@ -47,8 +47,6 @@ function App() {
     setSelectedShape(event.target.value);
   };
 
-
-  // Font options for the select input
   const fontFamilyOptions = [
     { value: 'Arial', label: 'Arial' },
     { value: 'Verdana', label: 'Verdana' },
@@ -67,23 +65,26 @@ function App() {
     { value: 'Arial Black', label: 'Arial Black' },
   ];
 
-  // Placeholder for Icon options (you'll fill this with actual icon data)
+  // UPDATED: Icon options now use Lucide icon names
   const iconOptions = [
     { value: '', label: 'No Icon' },
-    // Example: { value: '/path/to/icon1.svg', label: 'Star Icon' },
-    // Add actual icon options here based on your old project's assets
+    { value: 'star', label: 'Star' },
+    { value: 'heart', label: 'Heart' },
+    { value: 'leaf', label: 'Leaf' },
+    { value: 'cloud', label: 'Cloud' },
+    { value: 'aperture', label: 'Aperture' }, // Example from Lucide
+    // You can find more icon names at lucide.dev
   ];
 
-  // Placeholder for Shape options (you'll fill this with actual shape data)
   const shapeOptions = [
     { value: '', label: 'No Shape' },
     { value: 'circle', label: 'Circle' },
     { value: 'square', label: 'Square' },
-    // Add actual shape options here based on your old project's logic
+    { value: 'rounded-square', label: 'Rounded Square' },
+    { value: 'triangle', label: 'Triangle' },
   ];
 
-  // Functions to navigate between steps
-  const totalSteps = 3; // We'll define 3 steps for now: Text/Style, Icon/Shape, Final Preview
+  const totalSteps = 3;
 
   const nextStep = () => {
     setCurrentStep((prevStep) => Math.min(prevStep + 1, totalSteps));
@@ -93,18 +94,36 @@ function App() {
     setCurrentStep((prevStep) => Math.max(prevStep - 1, 1));
   };
 
+  const handleDownloadClick = async () => {
+    if (logoRef.current) {
+      const canvas = await html2canvas(logoRef.current, {
+        backgroundColor: null,
+        useCORS: true,
+      });
+
+      const image = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.href = image;
+      link.download = `${logoText}_wizard_logo.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      console.log('Logo downloaded!');
+    } else {
+      console.error('Logo preview element not found for download.');
+    }
+  };
+
   return (
     <div className="app-container">
       <h1>Welcome to Your Logo Wizard!</h1>
 
-      {/* Progress Bar Placeholder (we'll make this a component later) */}
       <div className="progress-bar-container">
         <div className="progress-bar" style={{ width: `${(currentStep / totalSteps) * 100}%` }}></div>
       </div>
       <p className="step-indicator">Step {currentStep} of {totalSteps}</p>
 
       <div className="wizard-content">
-        {/* Step 1: Text and Basic Styling */}
         {currentStep === 1 && (
           <div className="step-section">
             <h2>Step 1: Enter Logo Text & Basic Style</h2>
@@ -141,19 +160,16 @@ function App() {
           </div>
         )}
 
-        {/* Step 2: Icon and Shape Selection */}
         {currentStep === 2 && (
           <div className="step-section">
             <h2>Step 2: Choose Icon & Shape</h2>
-            <div className="controls-area"> {/* Use controls-area for consistent styling */}
-              {/* Icon Selection - using SelectInput for now, or new component later */}
+            <div className="controls-area">
               <SelectInput
                 label="Select Icon:"
                 value={selectedIcon}
                 onChange={handleIconChange}
                 options={iconOptions}
               />
-              {/* Shape Selection - using SelectInput for now, or new component later */}
               <SelectInput
                 label="Select Shape:"
                 value={selectedShape}
@@ -164,28 +180,28 @@ function App() {
           </div>
         )}
 
-        {/* Step 3: Final Preview and Download */}
         {currentStep === 3 && (
           <div className="step-section">
             <h2>Step 3: Final Preview & Download</h2>
             <p>Review your logo and download it!</p>
+            <button className="download-button" onClick={handleDownloadClick}>
+              Download Final Logo
+            </button>
           </div>
         )}
       </div>
 
-      {/* Logo Preview (always visible) */}
       <LogoPreview
         logoText={logoText}
         fontFamily={fontFamily}
         fontSize={fontSize}
         textColor={textColor}
         backgroundColor={backgroundColor}
-        // NEW PROPS for Icon and Shape
-        selectedIcon={selectedIcon}
+        selectedIcon={selectedIcon}    // Now passing the icon name string
         selectedShape={selectedShape}
+        ref={logoRef}
       />
 
-      {/* Navigation Buttons */}
       <div className="navigation-buttons">
         {currentStep > 1 && (
           <button className="nav-button prev-button" onClick={prevStep}>Previous</button>
@@ -193,7 +209,7 @@ function App() {
         {currentStep < totalSteps ? (
           <button className="nav-button next-button" onClick={nextStep}>Next</button>
         ) : (
-          <button className="nav-button download-button" onClick={() => alert('Download logic will go here!')}>Download Final Logo</button>
+          null
         )}
       </div>
     </div>

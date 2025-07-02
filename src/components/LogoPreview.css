@@ -1,71 +1,92 @@
 /* src/components/LogoPreview.css */
+
 .logo-preview-container {
-    background-color: #f9f9f9;
+    width: 100%;
+    max-width: 300px;
+    margin: 20px auto;
     padding: 20px;
+    border: 1px solid #ccc;
     border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    align-items: center; /* Center items horizontally */
+    align-items: center;
+    justify-content: center;
 }
 
 .logo-display-area {
-    width: 300px;
-    height: 200px;
-    border: 2px dashed #907bff; /* Dashed blue border */
+    width: 250px; /* Fixed size for the preview area */
+    height: 250px; /* Ensure it's square for circle/square shapes */
+    border: 2px dashed #888;
     display: flex;
-    justify-content: center;
+    flex-direction: column; /* Stack icon and text vertically */
     align-items: center;
-    font-size: 2.2em; /* Larger font size for the logo text */
-    color: #333;
-    background-color: #fff;
-    border-radius: 5px;
-    overflow: hidden; /* Ensure text doesn't overflow */
+    justify-content: center;
+    overflow: hidden; /* Hide anything outside the bounds */
+    transition: all 0.3s ease; /* Smooth transitions for changes */
 }
 
 .placeholder-text {
-    font-family: 'Arial Black', sans-serif; /* A bold, impactful font */
-    font-style: normal; /* Override potential italic */
-    color: #000; /* Black text */
+    font-size: 1.5em; /* Default font size */
+    margin: 0;
+    padding: 10px;
     text-align: center;
-    margin: 0; /* Remove default paragraph margin */
-    line-height: 1; /* Adjust line height for single line */
-    padding: 10px; /* Some padding inside the logo area */
+    word-break: break-word; /* Prevents long words from overflowing */
 }
 
-.download-button {
-    padding: 10px 20px;
-    background-color: #28a745; /* Green button */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    transition: background-color 0.3s ease;
-}
-
-.download-button:hover {
-    background-color: #218838; /* Darker green on hover */
-}
-
-/* src/components/LogoPreview.css (additional styles for icon and shape) */
-
-/* src/components/LogoPreview.css (additional styles for icon and shape) */
-
+/* Styles for Lucide SVG icons */
 .logo-icon {
-    max-width: 50px; /* Adjust size as needed for your icons */
-    max-height: 50px;
+    width: 50px; /* Adjust size as needed for your icons */
+    height: 50px;
     margin-bottom: 10px; /* Space between icon and text */
-    object-fit: contain; /* Ensures the image scales properly */
+    /* You can add color via 'stroke' or 'fill' if you want to override Lucide's default */
+    stroke: currentColor; /* Inherit color from parent text, or set a specific color */
+    fill: currentColor; /* For filled icons, inherit color or set specific */
 }
 
-/* Basic shape examples (you'll expand these based on your old project) */
+/* Basic shape examples */
 .shape-circle {
     border-radius: 50%;
-    /* You might need to adjust width/height of .logo-display-area if it's not already square */
 }
 
 .shape-square {
-    border-radius: 0;
-    /* This is usually default, but good to have for clarity */
+    border-radius: 0; /* Default, but explicit for clarity */
+}
+
+.shape-rounded-square {
+    border-radius: 15px; /* Example: adjust for desired roundness */
+}
+
+/* Basic Triangle (requires careful positioning and background handling) */
+.shape-triangle {
+    width: 0;
+    height: 0;
+    border-left: 125px solid transparent; /* Half of width */
+    border-right: 125px solid transparent; /* Half of width */
+    border-bottom: 250px solid var(--background-color, #f0f0f0); /* Uses the background color of the shape */
+    /* To make the triangle background match the selected background color,
+       you'll need to pass the background color into the CSS variable
+       or adjust the border-bottom color dynamically.
+       For html2canvas to capture it correctly, it often needs to be a solid shape.
+       Complex shapes might be better achieved with SVG background or a library.
+    */
+    display: block; /* Ensure it behaves as a block */
+    position: relative; /* For positioning icon/text inside */
+    transform: translateY(25%); /* Adjust to center content visually */
+}
+
+/* Ensure content is positioned correctly within the triangle */
+.shape-triangle .logo-icon,
+.shape-triangle .placeholder-text {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 50%; /* Adjust as needed */
+    z-index: 1; /* Ensure content is above triangle borders */
+}
+.shape-triangle .logo-icon {
+    top: 30%; /* Adjust icon position in triangle */
+}
+.shape-triangle .placeholder-text {
+    top: 60%; /* Adjust text position in triangle */
 }
