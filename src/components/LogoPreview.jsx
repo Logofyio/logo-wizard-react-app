@@ -2,19 +2,26 @@
 import React from 'react';
 import './LogoPreview.css';
 
-// Accept logoText as a prop
-function LogoPreview({ logoText }) { // <-- Destructure logoText from props
+function LogoPreview({ logoText }) {
+  // Add this function
+  const handleDownloadClick = () => {
+    console.log("Download button clicked!");
+    // We'll add the actual download logic here later
+    // For now, this just confirms the button is clickable and logs to console
+  };
+
   return (
     <div className="logo-preview-container">
       <div className="logo-display-area">
-        {/* Display the logoText prop, or a fallback if it's empty */}
         <p className="placeholder-text">
-          {logoText || 'Your Logo Will Appear Here'} {/* <-- Use logoText here */}
+          {logoText || "Your Logo Will Appear Here"}
         </p>
       </div>
-      <button className="download-button">Download Logo</button>
+      {/* Add the onClick={handleDownloadClick} prop to the button */}
+      <button className="download-button" onClick={handleDownloadClick}>
+        Download Logo
+      </button>
     </div>
   );
 }
-
 export default LogoPreview;
